@@ -286,8 +286,8 @@ class JanelaPrincipal(tk.Tk):
             row=2,
             column=0,
             sticky="nsew",
-            padx=14,
-            pady=12,
+            padx=6,
+            pady=4,
         )
         area_principal.grid_rowconfigure(0, weight=1)
         # A lateral preserva sua largura mínima e a grade recebe o espaço extra.
@@ -295,7 +295,7 @@ class JanelaPrincipal(tk.Tk):
         area_principal.grid_columnconfigure(1, weight=0, minsize=480)
 
         area_grade = tk.Frame(area_principal, background=self.COR_FUNDO)
-        area_grade.grid(row=0, column=0, sticky="nsew", padx=(0, 14))
+        area_grade.grid(row=0, column=0, sticky="nsew", padx=(0, 6))
         area_grade.grid_rowconfigure(0, weight=1)
         area_grade.grid_columnconfigure(0, weight=1)
 

@@ -12,10 +12,11 @@ from modelos.tipos import ModoEdicao, TipoCelula, TipoPassoBusca
 class Grade(tk.Frame):
     """Grade editável que representa o mapa do projeto."""
 
-    LINHAS = 20
-    COLUNAS = 30
+    LINHAS = 15
+    COLUNAS = 20
     TAMANHO_CELULA_MINIMO = 18
-    TAMANHO_CELULA_MAXIMO = 32
+    TAMANHO_CELULA_MAXIMO = 56
+    PROPORCAO_IMAGEM_PERSONAGEM = 0.82
 
     def __init__(self, mestre, ao_editar=None):
         super().__init__(mestre, background="#111827", borderwidth=2)
@@ -30,15 +31,23 @@ class Grade(tk.Frame):
         # Compatibilidade com trechos que ainda consultam o primeiro objetivo.
         self.celula_objetivo = None
 
-        self.imagem_tom = self._carregar_imagem_personagem(
+        self.imagem_tom_original = self._carregar_imagem_personagem(
             "tom.png",
             "Tom",
             "T",
         )
-        self.imagem_jerry = self._carregar_imagem_personagem(
+        self.imagem_jerry_original = self._carregar_imagem_personagem(
             "jerry.png",
             "Jerry",
             "J",
+        )
+        self.imagem_tom = self._redimensionar_imagem_personagem(
+            self.imagem_tom_original,
+            self.tamanho_celula,
+        )
+        self.imagem_jerry = self._redimensionar_imagem_personagem(
+            self.imagem_jerry_original,
+            self.tamanho_celula,
         )
         # As referências ficam na Grade para o Tkinter não descartar as imagens.
 
@@ -56,7 +65,7 @@ class Grade(tk.Frame):
         nome_personagem: str,
         letra_fallback: str,
     ):
-        """Carrega e reduz uma imagem; a célula usa a letra se houver falha."""
+        """Carrega uma imagem; a célula usa a letra se houver falha."""
         caminho = self._obter_caminho_imagem(nome_arquivo)
 
         if not caminho.is_file():
@@ -67,21 +76,58 @@ class Grade(tk.Frame):
             return None
 
         try:
-            imagem_original = tk.PhotoImage(file=str(caminho))
-            fator_largura = max(1, (imagem_original.width() + 19) // 20)
-            fator_altura = max(1, (imagem_original.height() + 15) // 16)
-            fator = max(fator_largura, fator_altura)
-
-            if fator > 1:
-                return imagem_original.subsample(fator, fator)
-
-            return imagem_original
+            return tk.PhotoImage(file=str(caminho))
         except (tk.TclError, OSError):
             print(
                 f"Imagem do {nome_personagem} não pôde ser carregada. "
                 f"Usando letra {letra_fallback}."
             )
             return None
+
+    def _redimensionar_imagem_personagem(
+        self,
+        imagem_original,
+        tamanho_celula: int,
+    ):
+        if imagem_original is None:
+            return None
+
+        tamanho_maximo = max(
+            1,
+            int(tamanho_celula * self.PROPORCAO_IMAGEM_PERSONAGEM),
+        )
+        fator_largura = max(
+            1,
+            (imagem_original.width() + tamanho_maximo - 1) // tamanho_maximo,
+        )
+        fator_altura = max(
+            1,
+            (imagem_original.height() + tamanho_maximo - 1) // tamanho_maximo,
+        )
+        fator = max(fator_largura, fator_altura)
+
+        if fator > 1:
+            return imagem_original.subsample(fator, fator)
+
+        return imagem_original
+
+    def _atualizar_imagens_personagens(self):
+        self.imagem_tom = self._redimensionar_imagem_personagem(
+            self.imagem_tom_original,
+            self.tamanho_celula,
+        )
+        self.imagem_jerry = self._redimensionar_imagem_personagem(
+            self.imagem_jerry_original,
+            self.tamanho_celula,
+        )
+
+        for linha_de_celulas in self.celulas:
+            for celula in linha_de_celulas:
+                celula.imagem_tom = self.imagem_tom
+                celula.imagem_jerry = self.imagem_jerry
+
+                if celula.tipo in (TipoCelula.INICIO, TipoCelula.OBJETIVO):
+                    celula.definir_tipo(celula.tipo)
 
     def _criar_celulas(self):
         for linha in range(self.LINHAS):
@@ -131,6 +177,7 @@ class Grade(tk.Frame):
             return
 
         self.tamanho_celula = tamanho_limitado
+        self._atualizar_imagens_personagens()
 
         for linha in range(self.LINHAS):
             self.grid_rowconfigure(linha, minsize=tamanho_limitado)
@@ -138,7 +185,7 @@ class Grade(tk.Frame):
         for coluna in range(self.COLUNAS):
             self.grid_columnconfigure(coluna, minsize=tamanho_limitado)
 
-    def ajustar_ao_espaco(self, largura: int, altura: int, margem: int = 16):
+    def ajustar_ao_espaco(self, largura: int, altura: int, margem: int = 4):
         """Escolhe células quadradas que caibam no espaço disponível."""
         largura_util = max(0, largura - margem)
         altura_util = max(0, altura - margem)

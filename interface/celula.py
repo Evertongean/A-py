@@ -70,8 +70,8 @@ class Celula(tk.Label):
 
         # Com imagem, largura e altura são medidas em pixels no Tkinter.
         # Sem imagem, voltam a ser medidas em caracteres e linhas.
-        largura = 20 if imagem else 2
-        altura = 16 if imagem else 1
+        largura = imagem.width() if imagem else 2
+        altura = imagem.height() if imagem else 1
 
         self.configure(
             background=cor,

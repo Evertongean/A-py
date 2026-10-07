@@ -55,17 +55,17 @@ class FabricaLabirintos:
         paredes = cls._criar_matriz(linhas, colunas, False)
 
         # Bancada vertical com uma passagem central.
-        #                              coluna 8, linha 0 ate linha 12
-        cls._adicionar_parede_vertical(paredes, 8, 0, 12)
-        cls._abrir_posicao(paredes, 6, 8)
+        #                              coluna 6, linha 0 ate linha 9
+        cls._adicionar_parede_vertical(paredes, 6, 0, 9)
+        cls._abrir_posicao(paredes, 5, 6)
 
         # Balcão horizontal com uma passagem próxima ao lado direito.
-        cls._adicionar_parede_horizontal(paredes, 13, 8, 24)
-        cls._abrir_posicao(paredes, 13, 18)
+        cls._adicionar_parede_horizontal(paredes, 10, 6, 17)
+        cls._abrir_posicao(paredes, 10, 14)
 
         # Mesa e armário representados por pequenos blocos.
-        cls._adicionar_retangulo(paredes, 4, 15, 7, 18)
-        cls._adicionar_retangulo(paredes, 15, 3, 17, 5)
+        cls._adicionar_retangulo(paredes, 3, 11, 5, 13)
+        cls._adicionar_retangulo(paredes, 11, 2, 13, 4)
 
         return DadosLabirinto(
             paredes=paredes,
@@ -82,27 +82,27 @@ class FabricaLabirintos:
         paredes = cls._criar_matriz(linhas, colunas, False)
 
         # Divisórias alternadas formam corredores e rotas diferentes.
-        cls._adicionar_parede_vertical(paredes, 5, 0, 15)
-        cls._abrir_posicao(paredes, 4, 5)
-        cls._abrir_posicao(paredes, 13, 5)
+        cls._adicionar_parede_vertical(paredes, 4, 0, 11)
+        cls._abrir_posicao(paredes, 3, 4)
+        cls._abrir_posicao(paredes, 9, 4)
 
-        cls._adicionar_parede_vertical(paredes, 11, 4, linhas - 1)
-        cls._abrir_posicao(paredes, 7, 11)
-        cls._abrir_posicao(paredes, 17, 11)
+        cls._adicionar_parede_vertical(paredes, 8, 3, linhas - 1)
+        cls._abrir_posicao(paredes, 5, 8)
+        cls._abrir_posicao(paredes, 12, 8)
 
-        cls._adicionar_parede_vertical(paredes, 17, 0, 15)
-        cls._abrir_posicao(paredes, 3, 17)
-        cls._abrir_posicao(paredes, 12, 17)
+        cls._adicionar_parede_vertical(paredes, 12, 0, 11)
+        cls._abrir_posicao(paredes, 2, 12)
+        cls._abrir_posicao(paredes, 9, 12)
 
-        cls._adicionar_parede_vertical(paredes, 23, 4, linhas - 1)
-        cls._abrir_posicao(paredes, 8, 23)
-        cls._abrir_posicao(paredes, 18, 23)
+        cls._adicionar_parede_vertical(paredes, 16, 3, linhas - 1)
+        cls._abrir_posicao(paredes, 6, 16)
+        cls._abrir_posicao(paredes, 13, 16)
 
         # Sofás e móveis criam becos curtos entre as divisórias.
-        cls._adicionar_parede_horizontal(paredes, 9, 6, 9)
-        cls._adicionar_parede_horizontal(paredes, 15, 12, 15)
-        cls._adicionar_parede_horizontal(paredes, 6, 18, 21)
-        cls._adicionar_retangulo(paredes, 15, 25, 16, 27)
+        cls._adicionar_parede_horizontal(paredes, 7, 5, 7)
+        cls._adicionar_parede_horizontal(paredes, 11, 9, 11)
+        cls._adicionar_parede_horizontal(paredes, 5, 13, 15)
+        cls._adicionar_retangulo(paredes, 10, 17, 11, 18)
 
         return DadosLabirinto(
             paredes=paredes,
@@ -119,7 +119,7 @@ class FabricaLabirintos:
         paredes = cls._criar_matriz(linhas, colunas, True)
         linha_central = linhas // 2
         linha_superior = 1
-        linha_inferior = linhas - 2
+        linha_inferior = linhas - 3
         coluna_inicio = 1
         coluna_objetivo = colunas - 2
         coluna_retorno = colunas - 5
@@ -171,12 +171,12 @@ class FabricaLabirintos:
         )
 
         # Corredores sem saída tornam a exploração menos óbvia.
-        cls._abrir_corredor_vertical(paredes, 8, 6, linha_central)
-        cls._abrir_corredor_horizontal(paredes, 6, 5, 8)
-        cls._abrir_corredor_vertical(paredes, 16, linha_central, 14)
-        cls._abrir_corredor_horizontal(paredes, 14, 16, 19)
-        cls._abrir_corredor_vertical(paredes, 8, 15, linha_inferior)
-        cls._abrir_corredor_vertical(paredes, 15, 16, linha_inferior)
+        cls._abrir_corredor_vertical(paredes, 6, 4, linha_central)
+        cls._abrir_corredor_horizontal(paredes, 4, 3, 6)
+        cls._abrir_corredor_vertical(paredes, 11, linha_central, 10)
+        cls._abrir_corredor_horizontal(paredes, 10, 11, 14)
+        cls._abrir_corredor_vertical(paredes, 5, 10, linha_inferior)
+        cls._abrir_corredor_vertical(paredes, 16, 10, linha_inferior)
 
         return DadosLabirinto(
             paredes=paredes,
